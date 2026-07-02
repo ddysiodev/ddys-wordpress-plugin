@@ -1,0 +1,47 @@
+.ddys-wp-admin-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.ddys-wp-admin-header h1 {
+  margin: 0;
+}
+
+.ddys-wp-admin-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(320px, 1fr);
+  gap: 18px;
+  max-width: 1120px;
+}
+
+.ddys-wp-panel {
+  border: 1px solid #dcdcde;
+  background: #fff;
+  padding: 16px;
+}
+
+.ddys-wp-panel label {
+  display: block;
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
+.ddys-wp-panel input,
+.ddys-wp-panel select,
+.ddys-wp-panel textarea {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+}
+
+#ddys-wp-shortcode-output {
+  font-family: Consolas, Monaco, monospace;
+}
+
+@media (max-width: 900px) {
+  .ddys-wp-admin-grid {
+    grid-template-columns: 1fr;
+  }
+}

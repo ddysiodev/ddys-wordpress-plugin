@@ -1,0 +1,24 @@
+{
+  "name": "ddys-wordpress-plugin",
+  "version": "0.1.0",
+  "description": "Official WordPress plugin for the DDYS Open API.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "test": "node tools/check.mjs && node --test tests/*.test.mjs"
+  },
+  "keywords": [
+    "ddys",
+    "wordpress",
+    "plugin",
+    "shortcode",
+    "block"
+  ],
+  "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddysiodev/ddys-wordpress-plugin.git"
+  },
+  "homepage": "https://github.com/ddysiodev/ddys-wordpress-plugin#readme"
+}
