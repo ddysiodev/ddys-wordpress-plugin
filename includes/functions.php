@@ -61,6 +61,22 @@ function ddys_wp_get_array_value(array $array, string $key, $default = null) {
     return array_key_exists($key, $array) ? $array[$key] : $default;
 }
 
+function ddys_wp_array_is_list(array $array): bool {
+    $index = 0;
+    foreach (array_keys($array) as $key) {
+        if ($key !== $index) {
+            return false;
+        }
+        $index++;
+    }
+
+    return true;
+}
+
+function ddys_wp_allowed_resource_protocols(): array {
+    return array_values(array_unique(array_merge(wp_allowed_protocols(), array('magnet', 'ed2k', 'thunder'))));
+}
+
 function ddys_wp_is_success_response($payload): bool {
     return is_array($payload) && (!isset($payload['success']) || true === (bool) $payload['success']);
 }

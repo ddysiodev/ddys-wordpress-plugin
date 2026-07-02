@@ -139,11 +139,16 @@ async function checkShortcodes() {
 async function checkRendererCoverage() {
   const renderer = await read('includes/class-ddys-renderer.php');
   const client = await read('includes/class-ddys-api-client.php');
+  const helpers = await read('includes/functions.php');
 
-  for (const fragment of ['online', 'download', 'collection_detail', 'share_detail', 'resource_links']) {
+  for (const fragment of ['online', 'download', 'collection_detail', 'share_detail', 'resource_links', 'normalize_list_items']) {
     if (!renderer.includes(fragment)) {
       failures.push(`Renderer missing coverage for ${fragment}`);
     }
+  }
+
+  if (!helpers.includes('ddys_wp_allowed_resource_protocols')) {
+    failures.push('Resource links should use an explicit protocol allow-list.');
   }
 
   if (!client.includes('types|genres|regions|calendar')) {
@@ -153,7 +158,7 @@ async function checkRendererCoverage() {
 
 async function checkForbiddenText() {
   const files = await listFiles(root);
-  const patterns = ['ghp' + '_', 'npm' + '_', '2026' + 'facai', 'x9k' + 'Nx', 'Do not ' + 'bundle', '不要' + '把'];
+  const patterns = ['ghp' + '_', 'npm' + '_', '2026' + 'facai', 'x9k' + 'Nx', 'Do not ' + 'bundle', '不要' + '把', '浣庣', '褰辫', '涓嶈'];
   for (const file of files) {
     const rel = relative(root, file).replace(/\\/g, '/');
     if (rel === 'tools/check.mjs') {

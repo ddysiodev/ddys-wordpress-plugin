@@ -14,11 +14,14 @@ test('plugin exposes the full shortcode surface', async () => {
 
 test('renderer covers nested DDYS API shapes', async () => {
   const text = await readFile('includes/class-ddys-renderer.php', 'utf8');
+  const helpers = await readFile('includes/functions.php', 'utf8');
 
   assert.match(text, /normalize_source_groups/);
   assert.match(text, /collection_detail/);
   assert.match(text, /share_detail/);
   assert.match(text, /resource_links/);
+  assert.match(text, /normalize_list_items/);
+  assert.match(helpers, /ddys_wp_allowed_resource_protocols/);
 });
 
 test('readme uses language-specific official website anchor text', async () => {
@@ -27,4 +30,10 @@ test('readme uses language-specific official website anchor text', async () => {
 
   assert.match(en, /\[DDYS\]\(https:\/\/ddys\.io\/\)/);
   assert.match(zh, /\[低端影视\]\(https:\/\/ddys\.io\/\)/);
+  const mojibakePattern = new RegExp([
+    '\u6d63\u5ea3',
+    '\u8930\u8fab',
+    '\u6d93\u5d88'
+  ].join('|'));
+  assert.doesNotMatch(zh, mojibakePattern);
 });

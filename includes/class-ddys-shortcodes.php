@@ -70,6 +70,7 @@ class DDYS_WP_Shortcodes {
         $atts = $this->atts($atts, array('q' => '', 'type' => 'movie', 'page' => 1, 'per_page' => 10, 'show_form' => true));
         $q    = isset($_GET['ddys_q']) ? sanitize_text_field(wp_unslash($_GET['ddys_q'])) : $atts['q'];
         $type = isset($_GET['ddys_type']) ? sanitize_key(wp_unslash($_GET['ddys_type'])) : $atts['type'];
+        $type = ddys_wp_choice($type, array('movie', 'share', 'request'), 'movie');
         $html = ddys_wp_normalize_bool_attr($atts['show_form'], true) ? $this->renderer->search_form(array('q' => $q, 'type' => $type)) : '';
 
         if (!$q) {
@@ -264,7 +265,10 @@ class DDYS_WP_Shortcodes {
                 continue;
             }
             if (in_array($key, array('page', 'per_page', 'limit', 'year', 'month'), true)) {
-                $query[$key] = absint($atts[$key]);
+                $number = $this->numeric_query_value($key, $atts[$key]);
+                if (null !== $number) {
+                    $query[$key] = $number;
+                }
             } else {
                 $query[$key] = sanitize_text_field($atts[$key]);
             }
@@ -278,5 +282,27 @@ class DDYS_WP_Shortcodes {
             return array('cache_ttl' => absint($atts['cache_ttl']));
         }
         return array();
+    }
+
+    private function numeric_query_value(string $key, $value): ?int {
+        $number = absint($value);
+
+        if ('month' === $key) {
+            return $number >= 1 && $number <= 12 ? $number : null;
+        }
+
+        if ('year' === $key) {
+            return $number >= 1900 && $number <= 2099 ? $number : null;
+        }
+
+        if ('page' === $key) {
+            return max(1, $number);
+        }
+
+        if (in_array($key, array('per_page', 'limit'), true)) {
+            return ddys_wp_int_range($number, 12, 1, 50);
+        }
+
+        return $number;
     }
 }

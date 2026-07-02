@@ -55,7 +55,11 @@ class DDYS_WP_Renderer {
             return $this->wrap($this->empty_state(), $args);
         }
 
-        $items = $this->looks_like_single_item($data) ? array($data) : $data;
+        $items = $this->normalize_list_items($data);
+        if (empty($items)) {
+            return $this->wrap($this->empty_state(), $args);
+        }
+
         $html  = '<div class="ddys-wp-items">';
 
         foreach ($items as $item) {
@@ -98,6 +102,10 @@ class DDYS_WP_Renderer {
         }
 
         $groups = $this->normalize_source_groups($data);
+        if (empty($groups)) {
+            return $this->wrap($this->empty_state(__('No sources found.', 'ddys-wordpress-plugin')), $args);
+        }
+
         $html   = '<div class="ddys-wp-sources">';
 
         foreach ($groups as $name => $resources) {
@@ -227,12 +235,19 @@ class DDYS_WP_Renderer {
         }
 
         $html = '<div class="ddys-wp-taxonomy-list">';
-        foreach ($data as $item) {
-            if (!is_array($item)) {
+        foreach ($data as $key => $item) {
+            if (is_array($item)) {
+                $name = ddys_wp_get_array_value($item, 'name', '');
+                $code = ddys_wp_get_array_value($item, 'code', '');
+            } else {
+                $name = (string) $item;
+                $code = is_string($key) ? $key : '';
+            }
+
+            if ('' === $name) {
                 continue;
             }
-            $name = ddys_wp_get_array_value($item, 'name', '');
-            $code = ddys_wp_get_array_value($item, 'code', '');
+
             $html .= '<span class="ddys-wp-pill"><span>' . esc_html($name) . '</span>';
             if ($code) {
                 $html .= '<code>' . esc_html($code) . '</code>';
@@ -312,6 +327,14 @@ class DDYS_WP_Renderer {
             );
         }
 
+        if (ddys_wp_array_is_list($data)) {
+            foreach ($data as $item) {
+                if (is_array($item) && (isset($item['url']) || isset($item['link']) || isset($item['resources']))) {
+                    return array(__('Resources', 'ddys-wordpress-plugin') => $data);
+                }
+            }
+        }
+
         $groups = array();
         foreach ($data as $key => $value) {
             if (is_array($value) && isset($value['resources']) && is_array($value['resources'])) {
@@ -340,8 +363,12 @@ class DDYS_WP_Renderer {
                 $label = $title . ' ' . ($index + 1);
             }
 
-            if ($href && preg_match('#^https?://#i', $href)) {
-                $links[] = '<a href="' . esc_url($href) . '" target="' . esc_attr($this->settings->get('target', '_blank')) . '" rel="noopener">' . esc_html($label ?: $title) . '</a>';
+            $scheme = strtolower((string) wp_parse_url($href, PHP_URL_SCHEME));
+            if ($href && $scheme && in_array($scheme, ddys_wp_allowed_resource_protocols(), true)) {
+                $safe_url = esc_url($href, ddys_wp_allowed_resource_protocols());
+                if ($safe_url) {
+                    $links[] = '<a href="' . $safe_url . '" target="' . esc_attr($this->settings->get('target', '_blank')) . '" rel="noopener">' . esc_html($label ?: $title) . '</a>';
+                }
             }
         }
 
@@ -378,6 +405,38 @@ class DDYS_WP_Renderer {
         }
 
         return $site_base . '/' . ltrim($url, '/');
+    }
+
+    private function normalize_list_items(array $data): array {
+        if ($this->looks_like_single_item($data)) {
+            return array($data);
+        }
+
+        if (ddys_wp_array_is_list($data)) {
+            return $data;
+        }
+
+        $items = array();
+        foreach ($data as $value) {
+            if (!is_array($value)) {
+                continue;
+            }
+
+            if ($this->looks_like_single_item($value)) {
+                $items[] = $value;
+                continue;
+            }
+
+            if (ddys_wp_array_is_list($value)) {
+                foreach ($value as $nested) {
+                    if (is_array($nested)) {
+                        $items[] = $nested;
+                    }
+                }
+            }
+        }
+
+        return $items;
     }
 
     private function looks_like_single_item(array $data): bool {
