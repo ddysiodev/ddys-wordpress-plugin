@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       DDYS WordPress Plugin
  * Plugin URI:        https://github.com/ddysiodev/ddys-wordpress-plugin
- * Description:       Embed DDYS Open API content with shortcodes, blocks, caching, and a configurable API base URL.
+ * Description:       Embed DDYS API content with shortcodes, blocks, caching, and a configurable API base URL.
  * Version:           0.1.0
  * Requires at least: 6.0
  * Tested up to:      7.0

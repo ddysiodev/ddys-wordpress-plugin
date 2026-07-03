@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-Official WordPress plugin for the [DDYS](https://ddys.io/) Open API.
+Official WordPress plugin for the [DDYS](https://ddys.io/) API.
 
 It gives WordPress site owners shortcodes, Gutenberg blocks, caching, diagnostics, and a configurable API base URL for the official DDYS API or a self-hosted Worker Proxy.
 

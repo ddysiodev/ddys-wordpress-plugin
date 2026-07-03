@@ -1,7 +1,7 @@
 {
   "name": "ddys-wordpress-plugin",
   "version": "0.1.0",
-  "description": "Official WordPress plugin for the DDYS Open API.",
+  "description": "低端影视 API 的官方 WordPress 插件。",
   "private": true,
   "type": "module",
   "scripts": {

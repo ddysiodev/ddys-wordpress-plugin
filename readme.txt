@@ -8,11 +8,11 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Embed DDYS Open API content with shortcodes, Gutenberg blocks, caching, and a configurable API base URL.
+Embed DDYS API content with shortcodes, Gutenberg blocks, caching, and a configurable API base URL.
 
 == Description ==
 
-DDYS WordPress Plugin lets site owners embed DDYS Open API content into WordPress posts, pages, widgets, and blocks.
+DDYS WordPress Plugin lets site owners embed DDYS API content into WordPress posts, pages, widgets, and blocks.
 
 Features:
 

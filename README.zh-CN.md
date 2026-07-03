@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-[低端影视](https://ddys.io/) Open API 的官方 WordPress 插件。
+[低端影视](https://ddys.io/) API 的官方 WordPress 插件。
 
 站长安装后，可以在 WordPress 文章、页面、区块编辑器里直接嵌入 DDYS 内容，并且支持缓存、诊断、短代码生成器，以及自定义 API Base URL。
 

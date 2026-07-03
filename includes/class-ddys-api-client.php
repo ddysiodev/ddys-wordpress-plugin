@@ -1,6 +1,6 @@
 <?php
 /**
- * DDYS Open API client.
+ * DDYS API client.
  *
  * @package DDYS_WordPress_Plugin
  */
